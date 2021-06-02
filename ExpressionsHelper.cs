@@ -14,7 +14,7 @@ namespace DataStructure
         private static List<string> hightPriority = new List<string> { "*", "/", "(", ")" };
         private static List<string> lowPriority = new List<string> { "+", "-" };
         /// <summary>
-        /// 将中缀表达式转换成后缀表达式(每个输入都要用空格分隔）
+        /// 将中缀表达式转换成后缀表达式
         /// 标准四则运算表达式->中缀表达式：所有运算负号都在两数字中间
         /// 1、从左到右遍历中缀表达式的每个数字和符号
         /// 2、是数字就输出，是符号则判断与栈顶符号的优先级，
@@ -30,11 +30,17 @@ namespace DataStructure
         {
             Stack<string> tmpStack = new Stack<string>();
             List<string> resultList = new List<string>();
-
-            string[] tmp = Regex.Split(infixExpression, "\\s+", RegexOptions.IgnoreCase);
+            List<string> tmp=new List<string>();
+            //提取+-*/数组和括号
+            foreach (Match match in Regex.Matches(infixExpression, @"([+\-*/\(\)])|(\d+)"))
+                tmp.Add(match.Value);
 
             foreach (var item in tmp)
             {
+                if(item=="")
+                {
+                    continue;
+                }
                 if (isNumberic(item))//数字输出
                 {
                     resultList.Add(item);
@@ -84,12 +90,21 @@ namespace DataStructure
                 var top = tmpStack.Pop();
                 resultList.Add(top);
             }
+            //空格分隔
             var result = string.Join(" ", resultList);
             Console.WriteLine("中缀表达式：{0}",infixExpression);
             Console.WriteLine("后缀表达式：{0}", result);
             return result;
         }
 
+        /// <summary>
+        /// 使用后缀表达式进行运算，得出结果(每个输入都要用空格分隔）
+        /// 规则
+        /// 1、从左到右遍历表达式的每个数字和符号
+        /// 2、遇到数字就进栈，遇到符号就将处于栈顶的两个数字出栈运算，运算结果进栈。
+        /// </summary>
+        /// <param name="postfixExpression"></param>
+        /// <returns></returns>
         public static int GetPostfixExpressionResult(string postfixExpression)
         {
             Stack<int> tmpStack = new Stack<int>();
@@ -108,8 +123,12 @@ namespace DataStructure
                     var tmpResult = getResult(a, item, b);
                     tmpStack.Push(tmpResult);
                 }
-            }
+            }          
             var result = tmpStack.Pop();
+            if (tmpStack.Count > 0)
+            {
+                throw new Exception("后缀表达式错误");
+            }
             Console.WriteLine("运算结果:{0}",result);
             return result;
         }
