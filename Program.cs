@@ -17,7 +17,4 @@ namespace DataStructure
             var v2 = ExpressionsHelper.GetPostfixExpressionResult(p2);
         }
     }
-
-
-
 }
