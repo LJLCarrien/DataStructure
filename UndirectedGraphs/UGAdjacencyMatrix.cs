@@ -1,8 +1,22 @@
-﻿using DataStructure.Graphs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 namespace DataStructure.UndirectedGraphs
 {
+    class Vertex
+    {
+        public string Data;
+        public int Index;
+        public bool isVisited;
+        public Vertex(string s, int i)
+        {
+            Data = s;
+            Index = i;
+        }
+        public void PrintSelf()
+        {
+            Console.WriteLine("data:{0},Index:{1}", Data, Index);
+        }
+    }
     /// <summary>
     /// 邻接矩阵实现无向图
     /// </summary>
