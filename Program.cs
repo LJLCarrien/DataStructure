@@ -488,7 +488,7 @@ namespace DataStructure
             graph.ShowAllEdge();
 
             Console.WriteLine();
-            graph.RemoveVertex("A");
+            graph.RemoveVertex("C");
             graph.ShowAllEdge();
 
             //Console.WriteLine();
@@ -509,6 +509,10 @@ namespace DataStructure
 
             //Console.WriteLine();
             //graph.RemoveEdge("C", "D");
+            //graph.ShowAllEdge();
+
+            //Console.WriteLine();
+            //graph.RemoveVertex("C");
             //graph.ShowAllEdge();
 
             #endregion

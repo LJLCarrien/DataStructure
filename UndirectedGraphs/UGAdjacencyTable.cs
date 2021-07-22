@@ -12,18 +12,18 @@ namespace DataStructure.UndirectedGraphs
     class EdgeNode
     {
         /// <summary>
-        /// 邻接点下标
+        /// 邻接顶点数据
         /// </summary>
-        public int Adjvex;
+        public VertexNode Adjvex;
         /// <summary>
         /// 权重
         /// </summary>
         public string Weight;
         /// <summary>
-        /// 下一个邻接点
+        /// 下一个邻接边表结点
         /// </summary>
         public EdgeNode Next;
-        public EdgeNode(int adjVex, string w = null, EdgeNode n = null)
+        public EdgeNode(VertexNode adjVex, string w = null, EdgeNode n = null)
         {
             Adjvex = adjVex;
             Weight = w;
@@ -39,7 +39,7 @@ namespace DataStructure.UndirectedGraphs
         /// <summary>
         /// 下标
         /// </summary>
-        public int Index;
+        public int Id;
         /// <summary>
         /// 顶点信息
         /// </summary>
@@ -50,7 +50,7 @@ namespace DataStructure.UndirectedGraphs
         public EdgeNode FirstEdge;
         public VertexNode(int i, string s, EdgeNode n = null)
         {
-            Index = i;
+            Id = i;
             Data = s;
             FirstEdge = n;
         }
@@ -61,7 +61,7 @@ namespace DataStructure.UndirectedGraphs
 
         public void PrintSelf()
         {
-            Console.WriteLine("data:{0},Index:{1}", Data, Index);
+            Console.WriteLine("data:{0},Index:{1}", Data, Id);
 
         }
     }
@@ -119,8 +119,8 @@ namespace DataStructure.UndirectedGraphs
             VertexNode v1Node = vexList[v1Index];
             VertexNode v2Node = vexList[v2Index];
 
-            EdgeNode edge1 = new EdgeNode(v1Index);
-            EdgeNode edge2 = new EdgeNode(v2Index);
+            EdgeNode edge1 = new EdgeNode(v1Node);
+            EdgeNode edge2 = new EdgeNode(v2Node);
             if (v1Node.FirstEdge == null)
             {
                 v1Node.FirstEdge = edge2;
@@ -227,12 +227,12 @@ namespace DataStructure.UndirectedGraphs
             var tmp = node.FirstEdge;
             while (tmp != null)
             {
-                RemoveEdge(node.Index, vexList[tmp.Adjvex].Index);
+                RemoveEdge(node.Id, tmp.Adjvex.Id);
                 tmp = node.FirstEdge;
             }
-            //不能真的删除顶点，不然会导致边表结点里存储的下标全部作废的，要么全部边表下标更新一遍，要么就是不存下标，改成指向VertexNode
-            //vexList.RemoveAt(verIndex);
-            //numVertexes--;
+            //Fixed:不能真的删除顶点，不然会导致边表结点里存储的下标全部作废的，要么全部边表下标更新一遍，要么就是不存下标，改成指向VertexNode
+            vexList.RemoveAt(verIndex);
+            numVertexes--;
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace DataStructure.UndirectedGraphs
             var tmp = vexList[v1Index].FirstEdge;
             while (tmp != null)
             {
-                var nodeIndex = tmp.Adjvex;
+                var nodeIndex = tmp.Adjvex.Id;
 
                 if (nodeIndex == v2Index)
                 {
@@ -306,17 +306,17 @@ namespace DataStructure.UndirectedGraphs
             for (int i = 0; i < vexList.Count; i++)
             {
                 Console.WriteLine();
-                Console.Write("{0}({1}) ", vexList[i].Data, vexList[i].Index);
+                Console.Write("{0}({1}) ", vexList[i].Data, vexList[i].Id);
 
                 var firstEdge = vexList[i].FirstEdge;
                 if (firstEdge != null)
                 {
-                    Console.Write("-> {0}({1}) ", vexList[firstEdge.Adjvex].Data, vexList[firstEdge.Adjvex].Index);
+                    Console.Write("-> {0}({1}) ", firstEdge.Adjvex.Data, firstEdge.Adjvex.Id);
 
                     var tmp = vexList[i].FirstEdge.Next;
                     while (tmp != null)
                     {
-                        Console.Write("-> {0}({1}) ", vexList[tmp.Adjvex].Data, vexList[tmp.Adjvex].Index);
+                        Console.Write("-> {0}({1}) ", tmp.Adjvex.Data, tmp.Adjvex.Id);
                         tmp = tmp.Next;
                     }
                 }
