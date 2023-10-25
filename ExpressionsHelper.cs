@@ -11,8 +11,22 @@ namespace DataStructure
     /// </summary>
     class ExpressionsHelper
     {
-        private static List<string> hightPriority = new List<string> { "*", "/", "(", ")" };
-        private static List<string> lowPriority = new List<string> { "+", "-" };
+        static int GetPriority(string op)
+        {
+            switch (op)
+            {
+                case "+":
+                case "-":
+                    return 1;
+                case "*":
+                case "/":
+                    return 2;
+                case "":
+                    return 3;
+            }
+            return -1;
+        }
+
         /// <summary>
         /// 将中缀表达式转换成后缀表达式
         /// 标准四则运算表达式->中缀表达式：所有运算负号都在两数字中间
@@ -23,6 +37,7 @@ namespace DataStructure
         /// 5、遇到右括号才弹出左括号
         /// 测试用例：9 + ( 3 - 1 ) * 3 + 10 / 2 期望结果：9 3 1 - 3 * + 10 2 / +
         /// 测试用例：1 + 2 * 3 + ( 4 * 5 + 6 ) * 7 期望结果：1 2 3 * + 4 5 * 6 + 7 * +
+        /// 测试用例：10*(0.8+0.2) 期望结果：10 0.8 0.2 + *
         /// </summary>
         /// <param name="infixExpression"></param>
         /// <returns></returns>
@@ -30,18 +45,18 @@ namespace DataStructure
         {
             Stack<string> tmpStack = new Stack<string>();
             List<string> resultList = new List<string>();
-            List<string> tmp=new List<string>();
+            List<string> tmp = new List<string>();
             //提取+-*/数组和括号
-            foreach (Match match in Regex.Matches(infixExpression, @"([+\-*/\(\)])|(\d+)"))
+            foreach (Match match in Regex.Matches(infixExpression, @"([+\-*/\(\)])|(\d+(\.\d+)?)"))
                 tmp.Add(match.Value);
 
             foreach (var item in tmp)
             {
-                if(item=="")
+                if (item == "")
                 {
                     continue;
                 }
-                if (isNumberic(item))//数字输出
+                if (IsNumberic(item))//数字输出
                 {
                     resultList.Add(item);
                 }
@@ -63,14 +78,14 @@ namespace DataStructure
                     else
                     {
                         //优先级：栈顶<当前，当前符号优先级高于栈顶符号，入栈
-                        if (tmpStack.Count == 0 || isLowPirority(tmpStack.Peek(), item) || tmpStack.Peek() == "(")
+                        if (tmpStack.Count == 0 || GetPriority(item) < GetPriority(tmpStack.Peek()) || tmpStack.Peek() == "(")
                         {
                             tmpStack.Push(item);
                         }
                         else
                         {
-                            //优先级：栈顶>=当前，当前符号优先级低于或等于栈顶符号，栈顶元素依次出栈，将当前符号进栈，遇到左扩号停止弹出行为。
-                            while (tmpStack.Count > 0 && !isLowPirority(tmpStack.Peek(), item))
+                            //优先级：当前<=栈顶，当前符号优先级低于或等于栈顶符号，栈顶元素依次出栈，将当前符号进栈，遇到左扩号停止弹出行为。
+                            while (tmpStack.Count > 0 && GetPriority(item) <= GetPriority(tmpStack.Peek()))
                             {
                                 if (tmpStack.Peek() == "(")
                                 {
@@ -92,7 +107,7 @@ namespace DataStructure
             }
             //空格分隔
             var result = string.Join(" ", resultList);
-            Console.WriteLine("中缀表达式：{0}",infixExpression);
+            Console.WriteLine("中缀表达式：{0}", infixExpression);
             Console.WriteLine("后缀表达式：{0}", result);
             return result;
         }
@@ -105,37 +120,54 @@ namespace DataStructure
         /// </summary>
         /// <param name="postfixExpression"></param>
         /// <returns></returns>
-        public static int GetPostfixExpressionResult(string postfixExpression)
+        public static float GetPostfixExpressionResult(string postfixExpression)
         {
-            Stack<int> tmpStack = new Stack<int>();
+            Stack<float> tmpStack = new Stack<float>();
             string[] tmp = Regex.Split(postfixExpression, "\\s+", RegexOptions.IgnoreCase);
 
             foreach (var item in tmp)
             {
-                if (isNumberic(item))
+                if (IsNumberic(item))
                 {
-                    tmpStack.Push(int.Parse(item));
+                    if (int.TryParse(item, out int intItem))
+                    {
+                        tmpStack.Push(intItem);
+                    }
+                    else if (float.TryParse(item, out float floatItem))
+                    {
+                        tmpStack.Push(floatItem);
+                    }
                 }
                 else
                 {
                     var b = tmpStack.Pop();
                     var a = tmpStack.Pop();
-                    var tmpResult = getResult(a, item, b);
+                    var tmpResult = GetResult(a, item, b);
                     tmpStack.Push(tmpResult);
                 }
-            }          
+            }
             var result = tmpStack.Pop();
             if (tmpStack.Count > 0)
             {
                 throw new Exception("后缀表达式错误");
             }
-            Console.WriteLine("运算结果:{0}",result);
+            Console.WriteLine("运算结果:{0}", result);
             return result;
         }
 
-        private static int getResult(int a, string symbol, int b)
+        /// <summary>
+        /// 计算中缀表达式
+        /// </summary>
+        public static float Calc(string infixExpression)
         {
-            int result = 0;
+            var postfixExpression = GetPostfixExpression(infixExpression);
+            var result = GetPostfixExpressionResult(postfixExpression);
+            return result;
+        }
+
+        private static float GetResult(float a, string symbol, float b)
+        {
+            float result = 0;
             switch (symbol)
             {
                 case "+":
@@ -155,19 +187,6 @@ namespace DataStructure
             }
             return result;
         }
-        /// <summary>
-        /// c1<c2 true
-        /// c1>=c2 false
-        /// </summary>
-        /// <param name="c1"></param>
-        /// <param name="c2"></param>
-        /// <returns></returns>
-        public static bool isLowPirority(string c1, string c2)
-        {
-            bool isC1InLow = lowPriority.Contains(c1);
-            bool isC2InHight = hightPriority.Contains(c2);
-            return isC1InLow && isC2InHight;
-        }
 
         /// <summary>
         /// 判断是否数字
@@ -175,10 +194,10 @@ namespace DataStructure
         /// </summary>
         /// <param name="numChar"></param>
         /// <returns></returns>
-        public static bool isNumberic(string num)
+        public static bool IsNumberic(string num)
         {
-            int i;
-            bool result = int.TryParse(num, out i);
+            string pattern = @"\d+(\.\d+)?"; //匹配整数和浮点数
+            bool result = Regex.IsMatch(num, pattern);
             return result;
         }
     }

@@ -396,13 +396,21 @@ namespace DataStructure
         static void DataStructTest()
         {
 
-            #region 栈的应用 - 计算四则表达式
-            //var p1 = ExpressionsHelper.GetPostfixExpression("9+(3-1)*3+10/2");
-            //var v1 = ExpressionsHelper.GetPostfixExpressionResult(p1);
-            //Console.WriteLine();
-            //var p2 = ExpressionsHelper.GetPostfixExpression("1+2*3+(4*5+6)*7");
-            //var v2 = ExpressionsHelper.GetPostfixExpressionResult(p2);
-            //Console.WriteLine();
+            #region 栈的应用 - 计算四则表达式(整数公式）
+            //var v1 = ExpressionsHelper.Calc("9+(3-1)*3+10/2");
+            //Console.WriteLine(v1);
+
+            //var v2 = ExpressionsHelper.Calc("1+2*3+(4*5+6)*7");
+            //Console.WriteLine(v2);
+            #endregion
+
+            #region 栈的应用 - 计算四则表达式（浮点数公式）
+            var v3 = ExpressionsHelper.Calc("10*(0.8+0.2)");
+            Console.WriteLine(v3);
+
+            var v4 = ExpressionsHelper.Calc("10*(8+2)");
+            Console.WriteLine(v4);
+
             #endregion
 
             #region KMP模式匹配算法
@@ -473,47 +481,48 @@ namespace DataStructure
             #endregion
 
             #region 无向图-邻接表实现
-            UGAdjacencyTable graph = new UGAdjacencyTable();
-            graph.AddVertex("A");
-            graph.AddVertex("B");
-            graph.AddVertex("C");
-            graph.AddVertex("D");
 
-            graph.AddEdge("A", "B");
-            graph.AddEdge("A", "C");
-            graph.AddEdge("A", "D");
-            graph.AddEdge("B", "C");
-            graph.AddEdge("C", "D");
+            //UGAdjacencyTable graph = new UGAdjacencyTable();
+            //graph.AddVertex("A");
+            //graph.AddVertex("B");
+            //graph.AddVertex("C");
+            //graph.AddVertex("D");
 
-            graph.ShowAllEdge();
+            //graph.AddEdge("A", "B");
+            //graph.AddEdge("A", "C");
+            //graph.AddEdge("A", "D");
+            //graph.AddEdge("B", "C");
+            //graph.AddEdge("C", "D");
 
-            Console.WriteLine();
-            graph.RemoveVertex("C");
-            graph.ShowAllEdge();
-
-            //Console.WriteLine();
-            //graph.RemoveEdge("A", "B");
-            //graph.ShowAllEdge();
-
-            //Console.WriteLine();
-            //graph.RemoveEdge("A", "C");
-            //graph.ShowAllEdge();
-
-            //Console.WriteLine();
-            //graph.RemoveEdge("A", "D");
-            //graph.ShowAllEdge();
-
-            //Console.WriteLine();
-            //graph.RemoveEdge("B", "C");
-            //graph.ShowAllEdge();
-
-            //Console.WriteLine();
-            //graph.RemoveEdge("C", "D");
             //graph.ShowAllEdge();
 
             //Console.WriteLine();
             //graph.RemoveVertex("C");
             //graph.ShowAllEdge();
+
+            ////Console.WriteLine();
+            ////graph.RemoveEdge("A", "B");
+            ////graph.ShowAllEdge();
+
+            ////Console.WriteLine();
+            ////graph.RemoveEdge("A", "C");
+            ////graph.ShowAllEdge();
+
+            ////Console.WriteLine();
+            ////graph.RemoveEdge("A", "D");
+            ////graph.ShowAllEdge();
+
+            ////Console.WriteLine();
+            ////graph.RemoveEdge("B", "C");
+            ////graph.ShowAllEdge();
+
+            ////Console.WriteLine();
+            ////graph.RemoveEdge("C", "D");
+            ////graph.ShowAllEdge();
+
+            ////Console.WriteLine();
+            ////graph.RemoveVertex("C");
+            ////graph.ShowAllEdge();
 
             #endregion
         }
