@@ -12,7 +12,7 @@ namespace DataStructure
 {
     class Program
     {
-      
+
         static void Main(string[] args)
         {
             //DateTime dtNow = DateTime.Now;
@@ -397,19 +397,21 @@ namespace DataStructure
         {
 
             #region 栈的应用 - 计算四则表达式(整数公式）
-            //var v1 = ExpressionsHelper.Calc("9+(3-1)*3+10/2");
-            //Console.WriteLine(v1);
 
-            //var v2 = ExpressionsHelper.Calc("1+2*3+(4*5+6)*7");
-            //Console.WriteLine(v2);
+            var v1 = ExpressionsHelper.Calc("9+(3-1)*3+10/2");
+            Console.WriteLine();
+
+            var v2 = ExpressionsHelper.Calc("1+2*3+(4*5+6)*7");
+            Console.WriteLine();
+
             #endregion
 
             #region 栈的应用 - 计算四则表达式（浮点数公式）
             var v3 = ExpressionsHelper.Calc("10*(0.8+0.2)");
-            Console.WriteLine(v3);
+            Console.WriteLine();
 
             var v4 = ExpressionsHelper.Calc("10*(8+2)");
-            Console.WriteLine(v4);
+            Console.WriteLine();
 
             #endregion
 

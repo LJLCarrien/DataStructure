@@ -32,9 +32,8 @@ namespace DataStructure
         /// 标准四则运算表达式->中缀表达式：所有运算负号都在两数字中间
         /// 1、从左到右遍历中缀表达式的每个数字和符号
         /// 2、是数字就输出，是符号则判断与栈顶符号的优先级，
-        /// 3、当前符号优先级大于栈顶符号，入栈
-        /// 4、当前符号优先级低于或等于栈顶符号或者当前符号是右括号，栈顶元素依次出栈，将当前符号进栈
-        /// 5、遇到右括号才弹出左括号
+        /// 3、当前符号优先级低于或等于栈顶符号或者当前符号是右括号，栈顶元素依次出栈，将当前符号进栈
+        /// 4、遇到右括号才弹出左括号
         /// 测试用例：9 + ( 3 - 1 ) * 3 + 10 / 2 期望结果：9 3 1 - 3 * + 10 2 / +
         /// 测试用例：1 + 2 * 3 + ( 4 * 5 + 6 ) * 7 期望结果：1 2 3 * + 4 5 * 6 + 7 * +
         /// 测试用例：10*(0.8+0.2) 期望结果：10 0.8 0.2 + *
@@ -60,45 +59,35 @@ namespace DataStructure
                 {
                     resultList.Add(item);
                 }
-                else//符号入栈
+                else if (item == "(")
                 {
-                    //只有遇到右括号的时候左括号才会弹出
-                    if (item == ")")
+                    tmpStack.Push(item);
+                }
+                else if (item == ")")
+                {
+                    while (tmpStack.Count > 0 && tmpStack.Peek() != "(")
                     {
-                        while (tmpStack.Peek() != "(")
-                        {
-                            var top = tmpStack.Pop();
-                            resultList.Add(top);
-                        }
-                        if (tmpStack.Peek() == "(")
-                        {
-                            tmpStack.Pop();
-                        }
+                        var top = tmpStack.Pop();
+                        resultList.Add(top);
                     }
-                    else
+                    //只有遇到右括号的时候左括号才会弹出
+                    if (tmpStack.Count > 0 && tmpStack.Peek() == "(")
                     {
-                        //优先级：栈顶<当前，当前符号优先级高于栈顶符号，入栈
-                        if (tmpStack.Count == 0 || GetPriority(item) < GetPriority(tmpStack.Peek()) || tmpStack.Peek() == "(")
-                        {
-                            tmpStack.Push(item);
-                        }
-                        else
-                        {
-                            //优先级：当前<=栈顶，当前符号优先级低于或等于栈顶符号，栈顶元素依次出栈，将当前符号进栈，遇到左扩号停止弹出行为。
-                            while (tmpStack.Count > 0 && GetPriority(item) <= GetPriority(tmpStack.Peek()))
-                            {
-                                if (tmpStack.Peek() == "(")
-                                {
-                                    break;
-                                }
-                                var top = tmpStack.Pop();
-                                resultList.Add(top);
-                            }
-                            tmpStack.Push(item);
-                        }
+                        tmpStack.Pop();
                     }
                 }
+                else
+                {
+                    //优先级：当前<=栈顶，当前符号优先级低于或等于栈顶符号，栈顶元素依次出栈，将当前符号进栈，遇到左扩号停止弹出行为。
+                    while (tmpStack.Count > 0 && GetPriority(item) <= GetPriority(tmpStack.Peek()))
+                    {
+                        var top = tmpStack.Pop();
+                        resultList.Add(top);
+                    }
+                    tmpStack.Push(item);
+                }
             }
+
             //数据已经读到末尾，栈中符号直接弹出并输出
             while (tmpStack.Count != 0)
             {
