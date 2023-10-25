@@ -11,7 +11,7 @@ namespace DataStructure
     /// </summary>
     class ExpressionsHelper
     {
-        static int GetPriority(string op)
+        private static int GetPriority(string op)
         {
             switch (op)
             {
@@ -38,14 +38,12 @@ namespace DataStructure
         /// 测试用例：1 + 2 * 3 + ( 4 * 5 + 6 ) * 7 期望结果：1 2 3 * + 4 5 * 6 + 7 * +
         /// 测试用例：10*(0.8+0.2) 期望结果：10 0.8 0.2 + *
         /// </summary>
-        /// <param name="infixExpression"></param>
-        /// <returns></returns>
         public static string GetPostfixExpression(string infixExpression)
         {
             Stack<string> tmpStack = new Stack<string>();
             List<string> resultList = new List<string>();
             List<string> tmp = new List<string>();
-            //提取+-*/数组和括号
+            //提取+-*/数字和括号
             foreach (Match match in Regex.Matches(infixExpression, @"([+\-*/\(\)])|(\d+(\.\d+)?)"))
                 tmp.Add(match.Value);
 
@@ -96,8 +94,8 @@ namespace DataStructure
             }
             //空格分隔
             var result = string.Join(" ", resultList);
-            Console.WriteLine("中缀表达式：{0}", infixExpression);
-            Console.WriteLine("后缀表达式：{0}", result);
+            Console.WriteLine($"中缀表达式：{infixExpression}");
+            Console.WriteLine($"后缀表达式：{result}");
             return result;
         }
 
@@ -107,8 +105,6 @@ namespace DataStructure
         /// 1、从左到右遍历表达式的每个数字和符号
         /// 2、遇到数字就进栈，遇到符号就将处于栈顶的两个数字出栈运算，运算结果进栈。
         /// </summary>
-        /// <param name="postfixExpression"></param>
-        /// <returns></returns>
         public static float GetPostfixExpressionResult(string postfixExpression)
         {
             Stack<float> tmpStack = new Stack<float>();
@@ -140,7 +136,7 @@ namespace DataStructure
             {
                 throw new Exception("后缀表达式错误");
             }
-            Console.WriteLine("运算结果:{0}", result);
+            Console.WriteLine($"运算结果:{result}");
             return result;
         }
 
@@ -179,10 +175,7 @@ namespace DataStructure
 
         /// <summary>
         /// 判断是否数字
-        /// 还可以使用正则、ASCII码等方式判断
         /// </summary>
-        /// <param name="numChar"></param>
-        /// <returns></returns>
         public static bool IsNumberic(string num)
         {
             string pattern = @"\d+(\.\d+)?"; //匹配整数和浮点数
